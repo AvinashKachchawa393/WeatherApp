@@ -19,6 +19,9 @@ body{
 .flex{
     display: flex;
 }
+form{
+    display: flex;
+}
 .nav-flex{
     flex-direction: row-reverse;
 }
