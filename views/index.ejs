@@ -1,0 +1,103 @@
+<% layout("/layouts/boilerplate") %>
+<body>
+    <!-- Serach bar -->
+     <div class="container">
+        <div class="search flex">
+            <form method="get" action="/weather/search" class="search-from">
+                <input type="text" name="search" placeholder="e.g NewYork" class="input" required>
+                <input type="submit" value="submit" class="btn btn-primary" style="border-radius: 1rem;">
+            </form>
+        </div>
+     </div>
+    <!-- Current Weather data -->
+            <div class="weather flex">
+                <div class="city_name">
+                    <h3><%= weather_data.name  %></h3>
+                </div>
+                <div class="weather-icon">
+                    <img src="<%= weather_img  %>" alter="weather icon" style="max-width: 10vw; min-width: 10vw; margin-bottom: 1rem;">
+                </div>
+                <div class="weather-body">
+                    <% let tempKelvin = weather_data.main.temp %>
+                    <% let tempCelsius = tempKelvin - 273.15; %>
+                    <h2 class="degree"><%= tempCelsius.toFixed(2)  %>°C</h2>
+                    <div class="flex">
+                    <div class="row">
+                        <div><p style="text-align: center;">humidity</p></div>
+                        <div class="col-4 flex " style="gap: 4px;  justify-content: center; align-items: baseline; flex-basis: content; margin-inline: 1rem;">
+                            <div class="humidity-img"><img src="https://cdn0.iconfinder.com/data/icons/weather-forecast-18/40/Precipitation_Humidity_Waves_Water_Weather_Forecast-512.png" alter="humidity-icon"></div>
+                            <div><p><%= weather_data.main.humidity  %>%</p></div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div><p style="text-align: center;">Wind Speed</p></div>
+                        <div class="col-4 flex " style="gap: 4px;  justify-content: center; align-items: baseline; flex-basis: content;">
+                            <div class="wind-img"><img src="https://icons.veryicon.com/png/o/miscellaneous/smart-site/wind-speed-5.png" alter="Wind-icon"  ></div>
+                            <div><p><%= weather_data.wind.speed  %>Km</p></div>
+                        </div>
+                    </div>
+                </div>
+                </div>
+            </div>
+      <!-- Weather Data for Forcast -->
+    <div class="container">
+        <h2>Weather Forcast</h2>
+        <div class="forcast-cards flex">
+            <% let count=0; %>
+            <% for(let forcast of forcast_data) { %>
+                <% count++; %>
+                <% 
+                let timestamp = forcast.dt;
+                let date = new Date(timestamp * 1000);
+                let currDate = (date.getDate()).toString().padStart(2, '0') + '-' + ((date.getMonth() + 1)).toString().padStart(2, '0') + '-' + date.getFullYear();
+                %>
+                <% if(count==9) count=1; %>
+                <% if(count==2||count==3||count==4||count==5||count==6||count==7||count==8) continue; %>
+                <% let tempature = forcast.main.temp; %>
+                <% let  temp =tempature - 273.15; %>
+                <% let imageURL = "" %>
+                <% if(forcast.weather[0].main=="Clouds"){
+                    imageURL = "https://cdn4.iconfinder.com/data/icons/the-weather-is-nice-today/64/weather_2-512.png";
+                }
+                else if(forcast.weather[0].main=="Clear"){
+                    imageURL = "https://static-00.iconduck.com/assets.00/weather-clear-symbolic-icon-2048x2048-v4afvu7m.png";
+                }
+                else if(forcast.weather[0].main=="Rain"){
+                    imageURL = "https://www.pngall.com/wp-content/uploads/11/Weather-PNG-Background.png";
+                }
+                else if(forcast.weather[0].main=="Drizzle"){
+                    imageURL = "https://cdn1.iconfinder.com/data/icons/weather-flat-8/50/Weather_Flat-29-1024.png";
+                }
+                else if(forcast.weather[0].main=="Thunderstorm"){
+                    imageURL = "https://cdn-icons-png.flaticon.com/512/1779/1779927.png";
+                }
+                else if(forcast.weather[0].main=="Snow"){
+                    imageURL = "https://www.freeiconspng.com/thumbs/snow-icon/snow-icon-14.png";
+                }
+                else if(forcast.weather[0].main=="Haze"){
+                    imageURL = "https://cdn-icons-png.flaticon.com/512/1779/1779807.png";
+                }
+                else if(forcast.weather[0].main=="Smoke"){
+                    imageURL = "https://cdn-icons-png.flaticon.com/512/11717/11717603.png";
+                }
+                else if(forcast.weather[0].main=="Dust"){
+                    imageURL = "https://cdn1.iconfinder.com/data/icons/weather-flat-8/50/Weather_Flat-28-512.png";
+                }
+                else if(forcast.weather[0].main=="Fog"){
+                    imageURL = "https://cdn-icons-png.flaticon.com/512/1197/1197102.png";
+                }
+                else if(forcast.weather[0].main=="Mist"){
+                    imageURL = "https://cdn1.iconfinder.com/data/icons/weather-forecast-meteorology-color-1/128/weather-foggy-sunny-1024.png";
+                }
+                else{
+                    imageURL = "https://cdn3.iconfinder.com/data/icons/disaster-and-weather-conditions/48/40-512.png"
+                } %>
+            <div class="forcast-card flex">
+                <div class="forcast-img"><img src="<%= imageURL  %>" alter="forcast-icon" ></div>
+                <div class="forcast-degree"><h4><%= temp.toFixed(2) %>°C</h4></div>
+                <div class="forcast-date"><%= currDate  %></div>
+            </div>
+            <% } %>          
+        </div>
+    </div>
+</body>
