@@ -148,3 +148,8 @@ body{
         width: 20vw !important;
     }
 }
+@media (max-width:350px){
+    .input{
+        width: 50vw;
+    }
+}
